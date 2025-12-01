@@ -6,7 +6,7 @@ const {
     listOrders, 
     updateOrder, 
     deleteOrder
-} = require('../controllers/orderController'); 
+} = require('../controller/orderController'); 
 
 const { verifyToken } = require('../middlewares/authMiddleware');
 

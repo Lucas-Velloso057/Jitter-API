@@ -11,7 +11,7 @@ const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./swagger.yaml');
 
 const app = express();
-const PORT = 3000;
+const PORT = 3500;
 
 app.use(bodyParser.json());
 

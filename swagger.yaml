@@ -7,7 +7,7 @@ info:
   description: API CRUD para gerenciamento de pedidos, construída em Node.js com Sequelize, conforme o Desafio Técnico Jitterbit.
 
 servers:
-  - url: http://localhost:3000
+  - url: http://localhost:3500
     description: Servidor de Desenvolvimento Local
 
 components:
