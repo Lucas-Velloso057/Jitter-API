@@ -26,7 +26,7 @@ Para rodar a API localmente, você precisa ter instalados:
 
 1.  **Clone o Repositório:**
     ```bash
-    git clone [SEU_LINK_DO_REPOSITORIO]
+    git clone https://github.com/Lucas-Velloso057/JitterBit-API.git
     cd jitterbit-api-challenge
     ```
 
@@ -65,7 +65,7 @@ A API requer autenticação JWT para acessar qualquer rota de pedido (`/order/*`
 2.  **Body (raw JSON):**
     ```json
     {
-      "apiKey": "SuaChaveSecretaMuitoForte123!" 
+      "apiKey": "FormaRapidoDeLogar" 
     }
     ```
     *(Use o valor definido em `JWT_SECRET` no seu arquivo `.env` como `apiKey`.)*
@@ -109,4 +109,5 @@ A documentação interativa, incluindo os schemas de entrada (`OrderInput` em Po
 * **Código Organizado:** Estrutura MVC com *controllers*, *models* e *routes*.
 * **Recursos Opcionais Implementados:**
     * Autenticação JWT.
+
     * Documentação Swagger.
