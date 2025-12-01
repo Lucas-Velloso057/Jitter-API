@@ -20,7 +20,6 @@ module.exports = (sequelize) => {
         tableName: 'orders'
     });
 
-    // Define o relacionamento com Items
     Order.associate = (models) => {
         Order.hasMany(models.item, {
             foreignKey: 'orderId',
@@ -29,4 +28,5 @@ module.exports = (sequelize) => {
     };
 
     return Order;
+
 };
