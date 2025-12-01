@@ -7,7 +7,7 @@ info:
   description: API CRUD para gerenciamento de pedidos, construída em Node.js com Sequelize, conforme o Desafio Técnico Jitterbit.
 
 servers:
-  - url: http://localhost:3500
+  - url: http://localhost:3000
     description: Servidor de Desenvolvimento Local
 
 components:
@@ -226,4 +226,5 @@ paths:
         '404':
           description: Pedido não encontrado.
         '401':
+
           description: Não autorizado (Token faltando ou inválido).
