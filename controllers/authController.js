@@ -1,5 +1,3 @@
-// /controllers/authController.js
-
 const jwt = require('jsonwebtoken');
 
 const SECRET_KEY = process.env.JWT_SECRET; 
@@ -21,4 +19,5 @@ exports.login = (req, res) => {
     }
 
     return res.status(401).json({ error: 'Credenciais inválidas.' });
+
 };
