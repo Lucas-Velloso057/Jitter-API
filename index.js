@@ -11,7 +11,7 @@ const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./swagger.yaml');
 
 const app = express();
-const PORT = 3500;
+const PORT = 3000;
 
 app.use(bodyParser.json());
 
@@ -30,4 +30,5 @@ db.sequelize.sync()
     })
     .catch(err => {
         console.error('Erro ao conectar ou sincronizar o banco de dados:', err);
+
     });
