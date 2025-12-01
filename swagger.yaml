@@ -1,0 +1,229 @@
+# swagger.yaml
+
+openapi: 3.0.0
+info:
+  title: Jitterbit Order Management API
+  version: 1.0.0
+  description: API CRUD para gerenciamento de pedidos, construída em Node.js com Sequelize, conforme o Desafio Técnico Jitterbit.
+
+servers:
+  - url: http://localhost:3000
+    description: Servidor de Desenvolvimento Local
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    OrderItem:
+      type: object
+      properties:
+        idItem:
+          type: string
+          example: '2434'
+          description: ID do produto (Item ID na entrada).
+        quantidadeItem:
+          type: integer
+          example: 1
+          description: Quantidade do item.
+        valorItem:
+          type: number
+          format: float
+          example: 1000.00
+          description: Valor unitário do item.
+
+    OrderInput:
+      type: object
+      required:
+        - numeroPedido
+        - valorTotal
+        - dataCriacao
+        - items
+      properties:
+        numeroPedido:
+          type: string
+          example: "v10089015vdb-01"
+          description: Número único do pedido.
+        valorTotal:
+          type: number
+          format: float
+          example: 10000.00
+          description: Valor total do pedido (deve bater com a soma dos itens).
+        dataCriacao:
+          type: string
+          format: date-time
+          example: "2023-07-19T12:24:11.5299601+00:00"
+          description: Data e hora da criação.
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        
+    OrderOutput:
+      type: object
+      properties:
+        orderId:
+          type: string
+          example: "v10089015vdb-01"
+          description: ID do pedido (campo transformado para o DB).
+        value:
+          type: number
+          format: float
+          example: 10000.00
+        creationDate:
+          type: string
+          format: date-time
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              productId:
+                type: integer
+              quantity:
+                type: integer
+              price:
+                type: number
+                format: float
+              orderId:
+                type: string
+        # Omitimos campos internos como createdAt/updatedAt/v, mas eles estariam aqui
+              
+paths:
+  /auth/login:
+    post:
+      summary: Obtém o Token JWT de Autenticação
+      tags:
+        - Autenticação
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                apiKey:
+                  type: string
+                  example: FormaRapidoDeLogar
+                  description: Chave de API estática (substitui a senha no desafio).
+      responses:
+        '200':
+          description: Sucesso. Retorna o token JWT.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '401':
+          description: Credenciais inválidas.
+
+  /order:
+    post:
+      summary: Cria um Novo Pedido (Create)
+      tags:
+        - Pedidos (CRUD)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderInput'
+      responses:
+        '201':
+          description: Pedido criado com sucesso (Transformation OK).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderOutput'
+        '409':
+          description: Conflito. Pedido já existe.
+        '400':
+          description: Erro de validação/consistência de dados.
+        '401':
+          description: Não autorizado (Token faltando ou inválido).
+
+  /order/list:
+    get:
+      summary: Lista Todos os Pedidos (Read All)
+      tags:
+        - Pedidos (CRUD)
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Retorna uma lista de pedidos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderOutput'
+        '401':
+          description: Não autorizado (Token faltando ou inválido).
+
+  /order/{numeroPedido}:
+    parameters:
+      - name: numeroPedido
+        in: path
+        required: true
+        schema:
+          type: string
+          example: v10089016vdb
+    get:
+      summary: Obtém um Pedido por ID (Read One)
+      tags:
+        - Pedidos (CRUD)
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Pedido encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderOutput'
+        '404':
+          description: Pedido não encontrado.
+        '401':
+          description: Não autorizado (Token faltando ou inválido).
+    put:
+      summary: Atualiza um Pedido Existente (Update)
+      tags:
+        - Pedidos (CRUD)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderInput'
+      responses:
+        '200':
+          description: Pedido atualizado com sucesso.
+        '404':
+          description: Pedido não encontrado.
+        '400':
+          description: Erro de validação/consistência de dados.
+        '401':
+          description: Não autorizado (Token faltando ou inválido).
+    delete:
+      summary: Deleta um Pedido (Delete)
+      tags:
+        - Pedidos (CRUD)
+      security:
+        - BearerAuth: []
+      responses:
+        '204':
+          description: Pedido deletado com sucesso (No Content).
+        '404':
+          description: Pedido não encontrado.
+        '401':
+          description: Não autorizado (Token faltando ou inválido).

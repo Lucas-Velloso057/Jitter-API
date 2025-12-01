@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  db:
+    # Imagem oficial do PostgreSQL
+    image: postgres:14-alpine 
+    
+    # Nome do container (útil para referenciar na rede)
+    container_name: postgres_db
+    
+    # Mapeamento da porta do container (5432) para a porta da sua máquina (5432)
+    ports:
+      - "5432:5432"
+      
+    # Variáveis de ambiente
+    environment:
+      # Nome do banco de dados (deve ser o mesmo que em seu .env: DB_NAME)
+      POSTGRES_DB: ${DB_NAME}
+      
+      # Usuário do banco de dados (deve ser o mesmo que em seu .env: DB_USER)
+      POSTGRES_USER: ${DB_USER}
+      
+      # Senha do banco de dados (deve ser o mesmo que em seu .env: DB_PASS)
+      POSTGRES_PASSWORD: ${DB_PASS}
+      
+    # Restarta o container se ele falhar
+    restart: unless-stopped
+    
+    # Mantém os dados persistentes no volume 'db-data'
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+# Definição do volume para persistência de dados
+volumes:
+  db-data:
+    driver: local
